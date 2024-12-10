@@ -22,11 +22,6 @@ jobs:
           echo "Something to stdout"
           exit 1
         continue-on-error: true
-
-      - run: echo ${{ steps.fail.outputs.stdout }}
-      - run: echo ${{ steps.fail.outputs.stderr }}
-      - run: echo ${{ steps.fail.outputs.exitcode }}
-
       - uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -37,19 +32,13 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             })
-            const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
-            })
 
             // 2. Prepare format of the comment
             const output = `
             <details><summary>Comments</summary>
+            Added some comments
             \n
-            ${{ steps.fail.outputs.stdout }}
-            \n
-            ${{ steps.fail.outputs.stderr }}
-            \n
-            ${{ steps.fail.outputs.exitcode }}
+
 
             </details>
 
@@ -71,3 +60,10 @@ jobs:
                 body: output
               })
             }
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Check on failures
+        if: steps.fail.outputs.status == 'failure'
+        run: exit 1
