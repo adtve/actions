@@ -2,7 +2,7 @@ name: OIDC
 
 on:
   workflow_dispatch:
-  push:
+  # push:
 
 permissions:
   contents: read

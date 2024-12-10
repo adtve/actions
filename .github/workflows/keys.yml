@@ -1,0 +1,36 @@
+name: KEYS
+
+on:
+  workflow_dispatch:
+  # push:
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+jobs:
+  test-oidc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: configure AWS credentials
+        id: credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-north-1
+          output-credentials: false
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: install cdk
+        run: |
+          npm install -g aws-cdk
+      - name: test aws cli
+        run: |
+          pip install -r requirements.txt
+          cdk deploy
