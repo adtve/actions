@@ -3,8 +3,12 @@ name: Pull Request
 on:
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
-  test-oidc:
+  test-pr:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -16,13 +20,8 @@ jobs:
         id: fail
         run: |
           echo "Something to stdout"
-          exit 1 "I want to see this in PR comments"
+          exit 1
         continue-on-error: true
-
-      - run: echo ${{ steps.fail.outputs.stdout }}
-      - run: echo ${{ steps.fail.outputs.stderr }}
-      - run: echo ${{ steps.fail.outputs.exitcode }}
-
       - uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -34,19 +33,14 @@ jobs:
               issue_number: context.issue.number,
             })
             const botComment = comments.find(comment => {
-              return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
+              return comment.user.type === 'Bot'
             })
 
             // 2. Prepare format of the comment
             const output = `
             <details><summary>Comments</summary>
+            Added some comments
             \n
-            ${{ steps.fail.outputs.stdout }}
-            \n
-            ${{ steps.fail.outputs.stderr }}
-            \n
-            ${{ steps.fail.outputs.exitcode }}
-
             </details>
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
@@ -67,3 +61,10 @@ jobs:
                 body: output
               })
             }
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Check on failures
+        if: steps.fail.outcome == 'failure'
+        run: exit 1
