@@ -26,7 +26,7 @@ class DynamodbLambdaStack(Stack):
                                      handler="main.handler",
                                      code=_lambda.Code.from_asset("./lambda"))
 
-        f = open("/Users/tdrach/Projects/test/dynamodb-lambda/version.txt", "r")
+        f = open("version.txt", "r")
         version = f.read() or "0.0"
 
         my_lambda.add_environment("TABLE_NAME", demo_table.table_name)
