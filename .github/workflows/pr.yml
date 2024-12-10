@@ -3,6 +3,10 @@ name: Pull Request
 on:
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   test-oidc:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
         id: fail
         run: |
           echo "Something to stdout"
-          exit 1 "I want to see this in PR comments"
+          exit 1
         continue-on-error: true
 
       - run: echo ${{ steps.fail.outputs.stdout }}
