@@ -31,4 +31,5 @@ jobs:
           npm install -g aws-cdk
       - name: test aws cli
         run: |
+          pip install -r requirements.txt
           cdk deploy
