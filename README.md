@@ -1,11 +1,10 @@
-# AWS DynamoDB , Lambda and CloudWatch
+# AWS DynamoDB and Lambda
 
 ## Overview
 
 Creates an AWS DynamoDB and Lambda function with the Python language bindings for CDK. Lambda function
-gets triggered from a CloudWatch event every minute.
+gets triggered manually by URL.
 
-![alt text](./architecture.png "Resources created with CDK")
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -13,7 +12,7 @@ This project is set up like a standard Python project.  The initialization
 process also creates a virtualenv within this project, stored under the .env
 directory.  To create the virtualenv it assumes that there is a `python3`
 (or `python` for Windows) executable in your path with access to the `venv`
-package. It requires you to use Pythn 3.6 as Lambda runtime is set to Python 3.6. 
+package. It requires you to use Pythn 3.6 as Lambda runtime is set to Python 3.6.
 For other python versions, please update runtime for consumer and producer functions under dynamodb_lambda/dynamodb_lambda_stack.py
 If for any reason the automatic creation of the virtualenv fails,
 you can create the virtualenv manually.
