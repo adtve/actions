@@ -61,6 +61,7 @@ jobs:
                 body: output
               })
             }
+<<<<<<< Updated upstream
       - name: Dump steps context
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
@@ -68,3 +69,8 @@ jobs:
       - name: Check on failures
         if: steps.fail.outcome == 'failure'
         run: exit 1
+=======
+      - name: execute if branch name starts from feature
+        if: ${{ contains( github.ref, 'feature/' ) }}
+        run: echo "Executed"
+>>>>>>> Stashed changes
