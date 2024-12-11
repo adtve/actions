@@ -65,6 +65,9 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: echo "$STEPS_CONTEXT"
+      - name: execute if branch name starts from feature
+        if: ${{ contains( github.ref, 'feature/' ) }}
+        run: echo "Executed"
       - name: Check on failures
         if: steps.fail.outcome == 'failure'
         run: exit 1
