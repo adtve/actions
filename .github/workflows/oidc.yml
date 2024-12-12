@@ -23,7 +23,7 @@ jobs:
         with:
           aws-region: eu-north-1
           output-credentials: false
-          role-to-assume: arn:aws:iam::922478218787:role/github-actions
+          role-to-assume: ${{ vars.AWS_ROLE }}
       - name: setup node
         uses: actions/setup-node@v4
         with:
